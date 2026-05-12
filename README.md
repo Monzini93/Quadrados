@@ -52,8 +52,18 @@ Repositório sugerido no GitHub: [Monzini93/Quadrados](https://github.com/Monzin
 
 ## Deploy na Vercel
 
+### Se o site abrir **404 NOT_FOUND** (ex.: `quadrados-*.vercel.app`)
+
+Quase sempre é um destes casos:
+
+1. **Root Directory errado** — O código Next está em **`web/`**. No painel Vercel: **Settings → General → Root Directory** = `web` (salvar e fazer **Redeploy**).
+2. **Build quebrado** — Em **Deployments**, abra o último deploy: se estiver vermelho/falhou, o domínio pode responder 404. Corrija o log de build (env `DATABASE_URL`, `JWT_SECRET`, comando de build).
+3. Este repositório também tem **`package.json` na raiz** com **npm workspaces** apontando para `web`, para a Vercel conseguir fazer `npm run build` na raiz e compilar o app em `web/`. Mesmo assim, definir **Root Directory = `web`** continua sendo a opção mais clara.
+
+### Passo a passo recomendado
+
 1. Crie o projeto importando este repositório.
-2. Defina o **Root Directory** como `web`.
+2. Defina o **Root Directory** como **`web`** (preferencial).
 3. Em **Environment Variables**, adicione pelo menos:
 
    - `DATABASE_URL`
