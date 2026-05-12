@@ -2,6 +2,7 @@
 .DS_Store
 Thumbs.db
 *.log
+node_modules/
 
 # Pasta legada (pode ser removida manualmente se ainda existir)
 quadrados-barbershop/

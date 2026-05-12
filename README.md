@@ -69,11 +69,9 @@ Quase sempre é um destes casos:
    - `DATABASE_URL`
    - `JWT_SECRET`
 
-4. **Build Command** (recomendado para aplicar migrações no deploy):
-
-   ```bash
-   npm run build:vercel
-   ```
+4. **Build Command** na Vercel:
+   - Se **Root Directory** = `web`: `npm run build:vercel`
+   - Se **Root Directory** = `.` (raiz do repo): `npm run build:vercel` (usa o script na raiz que delega para `web`)
 
 5. Após o primeiro deploy, rode o seed **uma vez** (localmente apontando para o mesmo `DATABASE_URL` de produção, ou via `vercel env pull` + `npm run db:seed`), ou crie o admin manualmente no banco.
 

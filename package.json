@@ -3,7 +3,8 @@
   "private": true,
   "workspaces": ["web"],
   "scripts": {
-    "build": "npm run build:vercel -w web",
+    "build": "npm run build -w web",
+    "build:vercel": "npm run build:vercel -w web",
     "dev": "npm run dev -w web",
     "lint": "npm run lint -w web"
   }
