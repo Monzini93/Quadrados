@@ -1,0 +1,7 @@
+# Raiz do monorepo Quadrados
+.DS_Store
+Thumbs.db
+*.log
+
+# Pasta legada (pode ser removida manualmente se ainda existir)
+quadrados-barbershop/

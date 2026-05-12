@@ -1,0 +1,88 @@
+// Quadrados — Barbearia (PostgreSQL / Neon)
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum BookingStatus {
+  CONFIRMED
+  CANCELLED
+}
+
+model Admin {
+  id           String   @id @default(cuid())
+  username     String   @unique
+  passwordHash String
+  createdAt    DateTime @default(now())
+}
+
+model Service {
+  id          String           @id @default(cuid())
+  name        String
+  description String           @default("")
+  priceCents  Int
+  durationMin Int
+  active      Boolean          @default(true)
+  sortOrder   Int              @default(0)
+  bookings    BookingService[]
+}
+
+model Booking {
+  id              String           @id @default(cuid())
+  customerName    String
+  customerPhone   String
+  date            DateTime         @db.Date
+  startMinute     Int
+  endMinute       Int
+  status          BookingStatus    @default(CONFIRMED)
+  createdAt       DateTime         @default(now())
+  services        BookingService[]
+
+  @@index([date, status])
+}
+
+model BookingService {
+  bookingId String
+  serviceId String
+  booking   Booking @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  service   Service @relation(fields: [serviceId], references: [id], onDelete: Restrict)
+
+  @@id([bookingId, serviceId])
+}
+
+model WeekdaySchedule {
+  weekday     Int     @id
+  isOpen      Boolean
+  openMinute  Int
+  closeMinute Int
+}
+
+model ShopSettings {
+  id                    String   @id @default("main")
+  adminWhatsAppDigits   String   @default("")
+  slotIntervalMinutes   Int      @default(30)
+  updatedAt             DateTime @default(now()) @updatedAt
+}
+
+model DateClosure {
+  id   String   @id @default(cuid())
+  date DateTime @unique @db.Date
+}
+
+model BlockedRange {
+  id          String   @id @default(cuid())
+  date        DateTime @db.Date
+  startMinute Int
+  endMinute   Int
+}
+
+model SpecialDayHours {
+  date        DateTime @id @db.Date
+  openMinute  Int
+  closeMinute Int
+}
