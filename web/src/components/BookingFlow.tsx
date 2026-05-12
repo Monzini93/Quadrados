@@ -51,7 +51,7 @@ function startOfDay(d: Date): Date {
   return x;
 }
 
-export function BookingFlow({ services }: { services: Svc[] }) {
+export function BookingFlow({ services, dbError }: { services: Svc[]; dbError?: string | null }) {
   const [step, setStep] = useState(0);
   const [selected, setSelected] = useState<string[]>([]);
   const [dateStr, setDateStr] = useState<string | null>(null);
@@ -166,6 +166,15 @@ export function BookingFlow({ services }: { services: Svc[] }) {
     }
     return cells;
   }, [monthCursor, today]);
+
+  if (dbError) {
+    return (
+      <div className="mx-auto max-w-3xl rounded-2xl border border-amber-900/40 bg-amber-950/30 p-6 text-sm text-amber-50">
+        <p className="font-semibold text-amber-200">Não dá para agendar agora</p>
+        <p className="mt-2 leading-relaxed">{dbError}</p>
+      </div>
+    );
+  }
 
   return (
     <div className="mx-auto max-w-3xl">

@@ -1,19 +1,23 @@
 import Link from "next/link";
-import { prisma } from "@/lib/prisma";
+import { loadActiveServicesForHome } from "@/lib/load-services";
 import { formatBRLFromCents } from "@/lib/format";
 import { ArrowRight, Clock, Sparkles } from "lucide-react";
 
 export const dynamic = "force-dynamic";
 
 export default async function HomePage() {
-  const services = await prisma.service.findMany({
-    where: { active: true },
-    orderBy: { sortOrder: "asc" },
-    take: 6,
-  });
+  const result = await loadActiveServicesForHome();
+  const services = result.ok ? result.services : [];
+  const dbError = result.ok ? null : result.message;
 
   return (
     <div className="space-y-20">
+      {dbError && (
+        <div className="rounded-2xl border border-amber-900/40 bg-amber-950/30 px-4 py-4 text-sm text-amber-100">
+          <p className="font-semibold text-amber-200">Conexão com o banco</p>
+          <p className="mt-2 leading-relaxed text-amber-100/90">{dbError}</p>
+        </div>
+      )}
       <section className="grid gap-12 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
         <div>
           <p className="text-sm font-medium uppercase tracking-widest text-amber-500/90">Barbearia moderna</p>
@@ -76,6 +80,9 @@ export default async function HomePage() {
           </Link>
         </div>
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {services.length === 0 && !dbError && (
+            <p className="col-span-full text-center text-sm text-zinc-500">Nenhum serviço cadastrado ainda.</p>
+          )}
           {services.map((s) => (
             <article
               key={s.id}
