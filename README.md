@@ -60,6 +60,10 @@ Quase sempre é um destes casos:
 2. **Build quebrado** — Em **Deployments**, abra o último deploy: se estiver vermelho/falhou, o domínio pode responder 404. Corrija o log de build (env `DATABASE_URL`, `JWT_SECRET`, comando de build).
 3. Este repositório também tem **`package.json` na raiz** com **npm workspaces** apontando para `web`, para a Vercel conseguir fazer `npm run build` na raiz e compilar o app em `web/`. Mesmo assim, definir **Root Directory = `web`** continua sendo a opção mais clara.
 
+### Se o build termina com Next ok mas aparece **No Output Directory named "public"**
+
+Isso costuma ser **Framework Preset** = "Other" (ou site estático), ou **Output Directory** no painel apontando para `public`. Há um **`vercel.json` na raiz** com `"framework": "nextjs"` para forçar o fluxo de Next.js. Ainda assim: em **Settings → Build and Deployment**, deixe **Framework Preset** em **Next.js**, **limpe** qualquer **Output Directory** personalizado (deixe vazio para o Next usar a saída correta) e prefira **Root Directory** = **`web`**.
+
 ### Passo a passo recomendado
 
 1. Crie o projeto importando este repositório.
